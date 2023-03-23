@@ -1,24 +1,25 @@
 import React from 'react';
 import {useSelector} from "react-redux";
-
+import {useDispatch} from "react-redux";
+import {removeSingleProductFromCart} from "../../store/modules/cartSlice";
 const CartCheckOutPage = () => {
+    const dispatch =  useDispatch();
     const {productsInCart} = useSelector(state => state.cart);
     console.log("productsInCart: ",productsInCart);
     return (
         <div>
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div className="flex h-full flex-col overflow-y-scroll bg-white">
+                {productsInCart && productsInCart.length > 0 && <div className="flex h-full flex-col overflow-y-scroll bg-white">
                     <div className="flex-1 overflow-y-auto py-6 px-4 sm:px-6">
                         <div className="flex items-start justify-between">
                             <h2 className="text-lg font-medium text-gray-900"
                                 id="slide-over-title">Shopping cart</h2>
                         </div>
-
                         <div className="mt-8">
                             <div className="flow-root">
                                 <ul role="list" className="-my-6 divide-y divide-gray-200">
-                                    {productsInCart.map((product) => (
-                                        <li className="flex py-6">
+                                    {productsInCart.map((product,index) => (
+                                        <li key={index} className="flex py-6">
                                             <div
                                                 className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                                 <img
@@ -26,7 +27,6 @@ const CartCheckOutPage = () => {
                                                     alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt."
                                                     className="h-full w-full object-contain object-center"/>
                                             </div>
-
                                             <div className="ml-4 flex flex-1 flex-col">
                                                 <div>
                                                     <div
@@ -41,10 +41,12 @@ const CartCheckOutPage = () => {
                                                 <div
                                                     className="flex flex-1 items-end justify-between text-sm">
                                                     <p className="text-gray-500">Qty 1</p>
-
+                                                    {product.id}
                                                     <div className="flex">
                                                         <button type="button"
-                                                                className="font-medium text-indigo-600 hover:text-indigo-500">Remove
+                                                                className="font-medium text-indigo-600 hover:text-indigo-500"
+                                                                onClick={()=> dispatch(removeSingleProductFromCart(product.id))}
+                                                        >Remove
                                                         </button>
                                                     </div>
                                                 </div>
@@ -55,7 +57,6 @@ const CartCheckOutPage = () => {
                             </div>
                         </div>
                     </div>
-
                     <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
                         <div className="flex justify-between text-base font-medium text-gray-900">
                             <p>Subtotal</p>
@@ -71,17 +72,17 @@ const CartCheckOutPage = () => {
                             <p>
                                 or
                                 <button type="button"
-                                        className="font-medium text-indigo-600 hover:text-indigo-500">
+                                        className="font-medium text-indigo-600 hover:text-indigo-500 p-1">
                                     Continue Shopping
                                     <span aria-hidden="true"> &rarr;</span>
                                 </button>
                             </p>
                         </div>
                     </div>
-                </div>
+                </div>}
+                {productsInCart && productsInCart.length === 0 && <h1>sorry:( you have not added any item to your cart</h1>}
             </div>
         </div>
     );
 };
-
 export default CartCheckOutPage;
