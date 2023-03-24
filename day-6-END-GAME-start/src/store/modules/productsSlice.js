@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit'
 import {setLoadingState} from "./loaderSlice"
-
+import {setError} from "./errorSlice";
 // Slice
 // A function that accepts an initial state, an object full of reducer functions,
 // and a “slice name”, and automatically generates action creators and action types that correspond to the reducers and state.
@@ -27,12 +27,10 @@ const productsSlice = createSlice({
     },
 });
 export default productsSlice.reducer
-
 // Actions // api calls etc
 const {SET_PRODUCTS} = productsSlice.actions
 const {SET_SINGLE_PRODUCT} = productsSlice.actions
 const {SET_ERROR} = productsSlice.actions
-
 
 // Fetch multiple products
 export const fetchProducts = () => async dispatch => {
@@ -42,16 +40,16 @@ export const fetchProducts = () => async dispatch => {
         const response = await fetch('https://dummyjson.com/products');
         const data = await response.json();
         console.log(data);
-
         // dispatch an action with the retrieved products data
         dispatch(SET_PRODUCTS(data.products));
         dispatch(setLoadingState(false)); // we are hiding the loader
     } catch (e) {
+        dispatch(setLoadingState(false)); // we are showing the loader
         // handle any errors that occur during fetching the products data
+        dispatch(setError(true, e.message))
         return console.error(e.message);
     }
 }
-
 // Fetch single product
 export const fetchProductById = (id) => async dispatch => {
     dispatch(setLoadingState(true));
@@ -77,11 +75,9 @@ export const fetchProductById = (id) => async dispatch => {
         dispatch(handleErrorResponse(true))
     }
 }
-
 export const handleErrorResponse = (APIResponseStatus) => (dispatch) => {
     dispatch(SET_ERROR(APIResponseStatus));
 }
-
 
 //
 // import { createSlice } from '@reduxjs/toolkit' is a line of code used in JavaScript for importing a specific function called createSlice from the @reduxjs/toolkit library.

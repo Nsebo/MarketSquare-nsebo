@@ -9,9 +9,16 @@ const cartSlice = createSlice({
     reducers: { // here we write the functions which will update the state
         ADD_PRODUCT_TO_CART: (state, action) => {
             // TODO i will update my productsInCart
-            console.log("action: ", action);
-            state.productsInCart = [...state.productsInCart, action.payload];
-            state.numberOfProductsInCart = state.productsInCart.length
+            // console.log("action: ", action);
+            const isProductInCart = state.productsInCart.some(product => product.id === action.payload.id);
+            // state.productsInCart = [...state.productsInCart, action.payload];
+            // state.numberOfProductsInCart = state.productsInCart.length
+            if(isProductInCart){
+
+            }else{
+                state.productsInCart = [...state.productsInCart, action.payload];
+                state.numberOfProductsInCart = state.productsInCart.length
+            }
         },
         REMOVE_PRODUCT_FROM_CART:(state, action) => {
             console.log("state:",state);

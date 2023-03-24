@@ -7,6 +7,7 @@ import { Provider } from 'react-redux' // This is making the store global
 import store from './store'
 import {BrowserRouter} from "react-router-dom";
 
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
